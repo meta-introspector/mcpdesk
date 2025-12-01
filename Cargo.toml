@@ -1,11 +1,11 @@
 [package]
-name = "rustdesk"
+name = "mcpdesk"
 version = "1.4.4"
 authors = ["rustdesk <info@rustdesk.com>"]
 edition = "2021"
 build= "build.rs"
-description = "RustDesk Remote Desktop"
-default-run = "rustdesk"
+description = "mcpdesk your mcp agent workdesk where you can watch them work on all you machines and record and interact and pause."
+default-run = "mcpdesk"
 rust-version = "1.75"
 
 [lib]
@@ -26,21 +26,15 @@ cli = []
 use_samplerate = ["samplerate"]
 use_rubato = ["rubato"]
 use_dasp = ["dasp"]
-flutter = ["flutter_rust_bridge"]
+flutter = []
 default = ["use_dasp"]
-hwcodec = ["scrap/hwcodec"]
-vram = ["scrap/vram"]
-mediacodec = ["scrap/mediacodec"]
+hwcodec = []
+vram = []
+mediacodec = []
 plugin_framework = []
-linux-pkg-config = ["magnum-opus/linux-pkg-config", "scrap/linux-pkg-config"]
-unix-file-copy-paste = [
-    "dep:x11-clipboard",
-    "dep:x11rb",
-    "dep:percent-encoding",
-    "dep:once_cell",
-    "clipboard/unix-file-copy-paste",
-]
-screencapturekit = ["cpal/screencapturekit"]
+linux-pkg-config = []
+unix-file-copy-paste = []
+screencapturekit = []
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -58,9 +52,10 @@ sha2 = "0.10"
 repng = "0.2"
 parity-tokio-ipc = { git = "https://github.com/rustdesk-org/parity-tokio-ipc" }
 magnum-opus = { git = "https://github.com/rustdesk-org/magnum-opus" }
-dasp = { version = "0.11", features = ["signal", "interpolate-linear", "interpolate"], optional = true }
-rubato = { version = "0.12", optional = true }
-samplerate = { version = "0.2", optional = true }
+dasp = { version = "0.11", features = ["signal", "interpolate-linear", "interpolate"], optional = true } # Re-enabled dependency
+rubato = { version = "0.12", optional = true } # Re-enabled dependency
+samplerate = { version = "0.2", optional = true } # Re-enabled dependency
+
 uuid = { version = "1.3", features = ["v4"] }
 clap = "4.2"
 rpassword = "7.2"
@@ -68,7 +63,7 @@ num_cpus = "1.15"
 bytes = { version = "1.4", features = ["serde"] }
 default-net = "0.14"
 wol-rs = "1.0"
-flutter_rust_bridge = { version = "=1.80", features = ["uuid"], optional = true}
+# flutter_rust_bridge = { version = "=1.80", features = ["uuid"], optional = true}
 errno = "0.3"
 rdev = { git = "https://github.com/rustdesk-org/rdev" }
 url = { version = "2.3", features = ["serde"] }
@@ -97,7 +92,6 @@ sys-locale = "0.3"
 enigo = { path = "libs/enigo", features = [ "with_serde" ] }
 clipboard = { path = "libs/clipboard" }
 ctrlc = "3.2"
-# arboard = { version = "3.4", features = ["wayland-data-control"] }
 arboard = { git = "https://github.com/rustdesk-org/arboard", features = ["wayland-data-control"] }
 clipboard-master = { git = "https://github.com/rustdesk-org/clipboard-master" }
 portable-pty = { git = "https://github.com/rustdesk-org/wezterm", branch = "rustdesk/pty_based_0.8.1", package = "portable-pty" }
@@ -138,18 +132,18 @@ tauri-winrt-notification = "0.1"
 runas = "1.2"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-objc = "0.2"
-cocoa = "0.24"
-dispatch = "0.2"
-core-foundation = "0.9"
-core-graphics = "0.22"
-include_dir = "0.7"
-fruitbasket = "0.10"
-objc_id = "0.1"
+# objc = "0.2"
+# cocoa = "0.24"
+# dispatch = "0.2"
+# core-foundation = "0.9"
+# core-graphics = "0.22"
+# include_dir = "0.7"
+# fruitbasket = "0.10"
+# objc_id = "0.1"
 # If we use piet "0.7" here, we must also update core-graphics to "0.24".
-piet = "0.6"
-piet-coregraphics = "0.6"
-foreign-types = "0.3"
+# piet = "0.6"
+# piet-coregraphics = "0.6"
+# foreign-types = "0.3"
 
 [target.'cfg(any(target_os = "macos", target_os = "linux", target_os = "windows"))'.dependencies]
 tray-icon = { git = "https://github.com/tauri-apps/tray-icon" }
@@ -157,7 +151,7 @@ tao = { git = "https://github.com/rustdesk-org/tao", branch = "dev" }
 image = "0.24"
 
 [target.'cfg(any(target_os = "macos", target_os = "linux"))'.dependencies]
-keepawake = { git = "https://github.com/rustdesk-org/keepawake-rs" }
+# keepawake = { git = "https://github.com/rustdesk-org/keepawake-rs" }
 
 [target.'cfg(any(target_os = "windows", target_os = "linux"))'.dependencies]
 wallpaper = { git = "https://github.com/rustdesk-org/wallpaper.rs" }
@@ -168,42 +162,38 @@ bytemuck = "1.23"
 ttf-parser = "0.25"
 
 [target.'cfg(target_os = "linux")'.dependencies]
-psimple = { package = "libpulse-simple-binding", version = "2.27" }
-pulse = { package = "libpulse-binding", version = "2.27" }
-rust-pulsectl = { git = "https://github.com/rustdesk-org/pulsectl" }
-async-process = "1.7"
-evdev = { git="https://github.com/rustdesk-org/evdev" }
-dbus = "0.9"
-dbus-crossroads = "0.5"
-pam = { git="https://github.com/rustdesk-org/pam" }
-users = { version = "0.11" }
-x11-clipboard = {git="https://github.com/clslaid/x11-clipboard", branch = "feat/store-batch", optional = true}
-x11rb =  {version = "0.12", features = ["all-extensions"], optional = true}
-percent-encoding = {version = "2.3", optional = true}
-once_cell = {version = "1.18", optional = true}
-nix = { version = "0.29", features = ["term", "process"]}
-gtk = "0.18"
-termios = "0.3"
-terminfo = "0.8"
-winit = "0.30"
+# psimple = { package = "libpulse-simple-binding", version = "2.27" }
+# pulse = { package = "libpulse-binding", version = "2.27" }
+# rust-pulsectl = { git = "https://github.com/rustdesk-org/pulsectl" }
+# async-process = "1.7"
+# evdev = { git="https://github.com/rustdesk-org/evdev" }
+# dbus = "0.9"
+# dbus-crossroads = "0.5"
+# pam = { git="https://github.com/rustdesk-org/pam" }
+# users = { version = "0.11" }
+# x11-clipboard = {git="https://github.com/clslaid/x11-clipboard", branch = "feat/store-batch", optional = true}
+# x11rb =  {version = "0.12", features = ["all-extensions"], optional = true}
+# percent-encoding = {version = "2.3", optional = true}
+# once_cell = {version = "1.18", optional = true}
+# nix = { version = "0.29", features = ["term", "process"]}
+# gtk = "0.18"
+# termios = "0.3"
+# terminfo = "0.8"
+# winit = "0.30"
 
 [target.'cfg(any(target_os = "linux", target_os = "android"))'.dependencies]
-openssl = { version = "0.10", features = ["vendored"] }
+# openssl = { version = "0.10", features = ["vendored"] }
 
 [target.'cfg(target_os = "android")'.dependencies]
-android_logger = "0.13"
-jni = "0.21"
-android-wakelock = { git = "https://github.com/rustdesk-org/android-wakelock" }
-
-[workspace]
-members = ["libs/scrap", "libs/hbb_common", "libs/enigo", "libs/clipboard", "libs/virtual_display", "libs/virtual_display/dylib", "libs/portable", "libs/remote_printer"]
-exclude = ["vdi/host", "examples/custom_plugin"]
+# android_logger = "0.13"
+# jni = "0.21"
+# android-wakelock = { git = "https://github.com/rustdesk-org/android-wakelock" }
 
 [package.metadata.winres]
 LegalCopyright = "Copyright © 2025 Purslane Ltd. All rights reserved."
-ProductName = "RustDesk"
-FileDescription = "RustDesk Remote Desktop"
-OriginalFilename = "rustdesk.exe"
+ProductName = "mcpdesk"
+FileDescription = "mcpdesk Remote Desktop"
+OriginalFilename = "mcpdesk.exe"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
 winres = "0.1"
@@ -219,8 +209,8 @@ hound = "3.5"
 docopt = "1.1"
 
 [package.metadata.bundle]
-name = "RustDesk"
-identifier = "com.carriez.rustdesk"
+name = "mcpdesk"
+identifier = "com.mcp.mcpdesk"
 icon = ["res/32x32.png", "res/128x128.png", "res/128x128@2x.png"]
 osx_minimum_system_version = "10.14"
 

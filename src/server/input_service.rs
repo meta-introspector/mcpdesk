@@ -457,7 +457,7 @@ const MOUSE_ACTIVE_DISTANCE: i32 = 5;
 
 static RECORD_CURSOR_POS_RUNNING: AtomicBool = AtomicBool::new(false);
 
-// https://github.com/rustdesk/rustdesk/issues/9729
+// https://github.com/mcpdesk/mcpdesk/issues/9729
 // We need to do some special handling for macOS when using the legacy mode.
 #[cfg(target_os = "macos")]
 static LAST_KEY_LEGACY_MODE: AtomicBool = AtomicBool::new(true);
@@ -537,14 +537,14 @@ impl VirtualInputState {
             // Note: `CGEventTapLocation::Session` will be affected by the mouse events.
             // When we're simulating key events, then move the physical mouse, the key events will be affected.
             // It looks like https://github.com/rustdesk/rustdesk/issues/9729#issuecomment-2432306822
-            // 1. Press "Command" key in RustDesk
+            // 1. Press "Command" key in mcpdesk
             // 2. Move the physical mouse
-            // 3. Press "V" key in RustDesk
+            // 3. Press "V" key in mcpdesk
             // Then the controlled side just prints "v" instead of pasting.
             //
             // Changing `CGEventTapLocation::Session` to `CGEventTapLocation::HID` fixes it.
             // But we do not consider this as a bug, because it's not a common case,
-            // we consider only RustDesk operates the controlled side.
+            // we consider only mcpdesk operates the controlled side.
             //
             // https://developer.apple.com/documentation/coregraphics/cgeventtaplocation/
             CGEventTapLocation::Session,
@@ -677,7 +677,7 @@ fn key_sleep() {
     //
     // There's a strange bug when running by `launchctl load -w /Library/LaunchAgents/abc.plist`
     // `std::thread::sleep(Duration::from_millis(20));` may sleep 90ms or more.
-    // Though `/Applications/RustDesk.app/Contents/MacOS/rustdesk --server` in terminal is ok.
+    // Though /Applications/mcpdesk.app/Contents/MacOS/mcpdesk --server in terminal is ok.
     let now = Instant::now();
     while now.elapsed() < Duration::from_millis(12) {
         std::thread::sleep(Duration::from_millis(1));
