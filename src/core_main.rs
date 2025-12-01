@@ -648,9 +648,15 @@ pub fn core_main() -> Option<Vec<String>> {
     }
     //_async_logger_holder.map(|x| x.flush());
     #[cfg(feature = "flutter")]
-    return Some(flutter_args);
+    {
+        log::info!("core_main: Returning Some(flutter_args). Final path.");
+        return Some(flutter_args);
+    }
     #[cfg(not(feature = "flutter"))]
-    return Some(args);
+    {
+        log::info!("core_main: Returning Some(args). Final path.");
+        return Some(args);
+    }
 }
 
 #[inline]

@@ -4,6 +4,7 @@
 )]
 
 use librustdesk::*;
+use hbb_common::log;
 
 #[cfg(any(target_os = "android", target_os = "ios", feature = "flutter"))]
 fn main() {
@@ -23,12 +24,18 @@ fn main() {
     feature = "flutter"
 )))]
 fn main() {
+    eprintln!("main: Entering main function."); // Add this
     #[cfg(all(windows, not(feature = "inline")))]
     unsafe {
         winapi::um::shellscalingapi::SetProcessDpiAwareness(2);
     }
+    log::info!("main: Calling core_main().");
     if let Some(args) = crate::core_main::core_main().as_mut() {
+        log::info!("main: core_main() returned Some(args). Calling ui::start({:?}).", args);
         ui::start(args);
+    } else {
+        log::info!("main: core_main() returned None. Exiting.");
+        eprintln!("Application initialization failed or exited.");
     }
     common::global_clean();
 }
