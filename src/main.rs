@@ -4,10 +4,10 @@
 )]
 
 use hbb_common::log;
-use crate::dioxus_backend::{DioxusBackend, DioxusEvent};
-use crate::ui_backend::UiBackend;
-use crate::common; // Explicitly import common
-use crate::core_main; // Explicitly import core_main
+use librustdesk::dioxus_backend::{DioxusBackend, DioxusEvent};
+use librustdesk::ui_backend::UiBackend;
+use librustdesk::common; // Explicitly import common
+use librustdesk::core_main; // Explicitly import core_main
 
 #[cfg(any(target_os = "android", target_os = "ios", feature = "flutter"))]
 fn main() {

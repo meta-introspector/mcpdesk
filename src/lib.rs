@@ -1,3 +1,6 @@
+pub mod main_app;
+pub mod dioxus_backend;
+pub mod ui_backend;
 mod keyboard;
 /// cbindgen:ignore
 pub mod platform;
@@ -63,7 +66,7 @@ mod updater;
 
 mod ui_cm_interface;
 mod ui_interface;
-mod ui_session_interface;
+pub mod ui_session_interface;
 
 mod hbbs_http;
 

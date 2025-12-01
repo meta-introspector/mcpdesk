@@ -2,7 +2,7 @@ use std::{
     collections::VecDeque,
     sync::{Arc, Mutex},
 };
-use crate::ui_session_interface::InvokeUiSession;
+use crate::ui_backend::ui_session_interface::InvokeUiSession;
 use crate::dioxus_backend::DioxusEvent;
 use hbb_common::{
     log,
@@ -10,6 +10,7 @@ use hbb_common::{
 };
 use scrap::ImageRgb; // Assuming scrap::ImageRgb is available
 
+#[derive(Clone, Default)]
 pub struct DioxusHandler {
     session_id: String,
     event_channel: Arc<Mutex<VecDeque<DioxusEvent>>>,
@@ -24,8 +25,11 @@ impl DioxusHandler {
     }
 }
 
+
+
 // Basic implementation of InvokeUiSession for DioxusHandler
 impl InvokeUiSession for DioxusHandler {
+
     fn set_cursor_data(&self, cd: CursorData) {
         log::debug!("DioxusHandler: set_cursor_data: {:?}", cd);
     }
@@ -174,7 +178,6 @@ impl InvokeUiSession for DioxusHandler {
     fn set_current_display(&self, disp_idx: i32) {
         log::debug!("DioxusHandler: set_current_display: {}", disp_idx);
     }
-    #[cfg(feature = "flutter")]
     fn is_multi_ui_session(&self) -> bool {
         log::debug!("DioxusHandler: is_multi_ui_session");
         false // Placeholder for Dioxus
@@ -196,8 +199,4 @@ impl InvokeUiSession for DioxusHandler {
     }
 }
 
-impl Default for DioxusHandler {
-    fn default() -> Self {
-        panic!("DioxusHandler::new must be used to construct it.")
-    }
-}
+

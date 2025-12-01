@@ -2,8 +2,7 @@ use std::{
     collections::{HashMap, VecDeque},
     sync::{Arc, Mutex, RwLock},
 };
-use crate::ui_backend::{UiBackend, InvokeUiSession};
-use dioxus_desktop::{WindowBuilder, launch_cfg, Config as DioxusConfig};
+use crate::ui_backend::{UiBackend, self};
 use dioxus::prelude::*;
 use hbb_common::log;
 use crate::main_app::App;
@@ -14,7 +13,7 @@ pub enum DioxusEvent {
     MsgBox { msgtype: String, title: String, text: String },
     NewMessage { msg: String },
     // VideoFrame { display: usize, data: Vec<u8> }, // Placeholder for video frames
-    SwitchDisplay { display: crate::message_proto::SwitchDisplay }, // Use actual SwitchDisplay type
+    SwitchDisplay { display: hbb_common::message_proto::SwitchDisplay }, // Use actual SwitchDisplay type
     // ... other events that need to be pushed to Dioxus UI
 }
 
@@ -53,9 +52,7 @@ impl UiBackend for DioxusBackend {
         // The actual rendering logic will come in Phase 4.
         
         // This assumes a root component `App` will be defined later
-        // and that `dioxus_desktop::launch_cfg` is the correct way to start.
-        launch_cfg(component! { App {} }, DioxusConfig::new().with_window(WindowBuilder::new().with_title("mcpdesk Dioxus"))
-        );
+        dioxus::launch(App);
         Ok(())
     }
     

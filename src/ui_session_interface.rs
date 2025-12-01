@@ -1654,7 +1654,7 @@ impl<T: InvokeUiSession> Session<T> {
     }
 }
 
-pub trait InvokeUiSession: Send + Sync + Clone + 'static + Sized + Default {
+pub trait InvokeUiSession: Send + Sync + Clone + 'static + Default {
     fn set_cursor_data(&self, cd: CursorData);
     fn set_cursor_id(&self, id: String);
     fn set_cursor_position(&self, cp: CursorPosition);
@@ -1713,7 +1713,6 @@ pub trait InvokeUiSession: Send + Sync + Clone + 'static + Sized + Default {
     fn on_texture(&self, display: usize, texture: *mut c_void);
     fn set_multiple_windows_session(&self, sessions: Vec<WindowsSession>);
     fn set_current_display(&self, disp_idx: i32);
-    #[cfg(feature = "flutter")]
     fn is_multi_ui_session(&self) -> bool;
     fn update_record_status(&self, start: bool);
     fn update_empty_dirs(&self, _res: ReadEmptyDirsResponse) {}

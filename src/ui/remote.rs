@@ -310,6 +310,10 @@ impl InvokeUiSession for SciterHandler {
     fn set_current_display(&self, _disp_idx: i32) {
         self.call("setCurrentDisplay", &make_args!(_disp_idx));
     }
+    fn is_multi_ui_session(&self) -> bool {
+        log::debug!("SciterHandler: is_multi_ui_session");
+        false // Sciter does not support multi-UI session
+    }
 
     fn set_multiple_windows_session(&self, sessions: Vec<WindowsSession>) {
         let mut v = Value::array(0);
