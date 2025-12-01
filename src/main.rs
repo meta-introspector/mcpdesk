@@ -3,7 +3,11 @@
     windows_subsystem = "windows"
 )]
 
-use librustdesk::*;
+use hbb_common::log;
+use crate::dioxus_backend::{DioxusBackend, DioxusEvent};
+use crate::ui_backend::UiBackend;
+use crate::common; // Explicitly import common
+use crate::core_main; // Explicitly import core_main
 
 #[cfg(any(target_os = "android", target_os = "ios", feature = "flutter"))]
 fn main() {
@@ -23,13 +27,28 @@ fn main() {
     feature = "flutter"
 )))]
 fn main() {
+    eprintln!("main: Entering main function (Dioxus version)."); // Modified log
     #[cfg(all(windows, not(feature = "inline")))]
     unsafe {
         winapi::um::shellscalingapi::SetProcessDpiAwareness(2);
     }
-    if let Some(args) = crate::core_main::core_main().as_mut() {
-        ui::start(args);
+
+    if !common::global_init() {
+        log::error!("Global initialization failed.");
+        eprintln!("Global initialization failed.");
+        return;
     }
+
+    // Initialize Dioxus Backend
+    let dioxus_backend = DioxusBackend::new();
+    log::info!("main: DioxusBackend initialized.");
+
+    // Start the Dioxus event loop
+    if let Err(e) = dioxus_backend.start_event_loop() {
+        log::error!("Failed to start Dioxus event loop: {:?}", e);
+        eprintln!("Failed to start Dioxus event loop: {:?}", e);
+    }
+    
     common::global_clean();
 }
 
