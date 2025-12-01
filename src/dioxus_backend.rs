@@ -6,6 +6,7 @@ use crate::ui_backend::{UiBackend, InvokeUiSession};
 use dioxus_desktop::{WindowBuilder, launch_cfg, Config as DioxusConfig};
 use dioxus::prelude::*;
 use hbb_common::log;
+use crate::main_app::App;
 
 // Define DioxusEvent similar to the plan
 #[derive(Clone, Debug)]
@@ -53,15 +54,7 @@ impl UiBackend for DioxusBackend {
         
         // This assumes a root component `App` will be defined later
         // and that `dioxus_desktop::launch_cfg` is the correct way to start.
-        launch_cfg(component! {
-            rsx! {
-                // Root component for the Dioxus app
-                // Will contain logic to render the main UI
-                div {
-                    "mcpdesk Dioxus UI - Under Construction"
-                }
-            }
-        }, DioxusConfig::new().with_window(WindowBuilder::new().with_title("mcpdesk Dioxus"))
+        launch_cfg(component! { App {} }, DioxusConfig::new().with_window(WindowBuilder::new().with_title("mcpdesk Dioxus"))
         );
         Ok(())
     }
