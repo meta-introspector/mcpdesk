@@ -3,9 +3,17 @@ use std::{
     sync::{Arc, Mutex, RwLock},
 };
 use crate::ui_backend::{UiBackend, self};
-use dioxus::prelude::*;
 use hbb_common::log;
-use crate::main_app::App;
+
+// We temporarily remove `dioxus::prelude::*;` and `crate::main_app::App;`
+// as we are bypassing Dioxus launching for this test.
+// We also need `tao` and `wry` imports, now correctly from `dioxus_desktop`.
+use dioxus_desktop::tao::{
+    event::{Event, StartCause, WindowEvent},
+    event_loop::{ControlFlow, EventLoop},
+    window::WindowBuilder,
+};
+use dioxus_desktop::wry::{WebContext, WebViewBuilder};
 
 // Define DioxusEvent similar to the plan
 #[derive(Clone, Debug)]
@@ -47,13 +55,40 @@ impl UiBackend for DioxusBackend {
     }
     
     fn start_event_loop(&self) -> Result<(), Box<dyn std::error::Error>> {
-        // This is a basic placeholder. Real Dioxus app launch involves rendering components.
-        // For now, we'll just launch an empty window or a basic component.
-        // The actual rendering logic will come in Phase 4.
+        log::info!("dioxus_backend: Launching vanilla wry-tao test window.");
+
+        // Code from working wry-tao example
+        let event_loop = EventLoop::new();
+        let window = WindowBuilder::new()
+            .with_title("MCPDesk Wry-Tao Test")
+            .build(&event_loop)
+            .expect("Failed to build window");
         
-        // This assumes a root component `App` will be defined later
-        dioxus::launch(App);
-        Ok(())
+        let mut web_context = WebContext::new(None);
+        let _webview = WebViewBuilder::new_with_web_context(&mut web_context)
+            .with_url("https://www.google.com")
+            .build(&window)
+            .expect("Failed to build webview");
+
+        event_loop.run(move |event, _, control_flow| {
+            *control_flow = ControlFlow::Wait;
+
+            match event {
+                Event::NewEvents(StartCause::Init) => {
+                    log::info!("MCPDesk Wry-Tao application started. WebView initialized.");
+                }
+                Event::WindowEvent {
+                    event: WindowEvent::CloseRequested,
+                    ..
+                } => {
+                    log::info!("MCPDesk Wry-Tao window close requested. Exiting.");
+                    *control_flow = ControlFlow::Exit
+                },
+                _ => (),
+            }
+        });
+        Ok(()) // event_loop.run() is diverging, this Ok(()) is technically unreachable.
+               // However, to make the compiler happy with the Result return type, it's there.
     }
     
     fn shutdown(&self) {
